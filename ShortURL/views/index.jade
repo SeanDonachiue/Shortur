@@ -1,0 +1,27 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to #{title}
+	#shortlink
+	p
+	form#formAddURL(name="addURL", method="post", action="/addURL")
+		input#inputURL(type="text", placeholder="I Hunger For Long URLs!", name="longURL")
+	script.
+		$('.input').keypress(function (k) {
+		if (k.which == 13) {
+			var frm = $('form#formAddURL');
+			frm.submit(function(ev) {
+				var request = $.ajax({
+					type: frm.attr('method'),
+					url: frm.attr('action'),
+					data: frm.serialize(),
+					success: function(response) {
+						document.getElementById("shortlink").innerHTML = response;
+					}
+				});
+				return false;
+			});
+			return false;
+			}
+		});
